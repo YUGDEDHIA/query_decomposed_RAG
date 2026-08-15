@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.chunker import chunk_text
 from src.loader import company_from_filename, load_pdf
+from src.section_detector import assign_sections, detect_sections
 
 
 def main() -> None:
@@ -34,10 +35,17 @@ def main() -> None:
     chunks = chunk_text(pages, company=company, source_file=pdf_path.name)
     print(f"company={company!r}, {len(chunks)} chunks")
 
+    sections = detect_sections(str(pdf_path))
+    if sections is None:
+        print("section detection: FAILED (ToC not found -- chunks left untagged)")
+    else:
+        print(f"section detection: {len(sections)} sections found")
+        assign_sections(chunks, sections)
+
     for c in chunks[:3]:
         word_count = len(c.text.split())
         preview = c.text[:200].replace("\n", " ")
-        print(f"\n--- chunk {c.chunk_index} (pages {c.page_range}, {word_count} words) ---")
+        print(f"\n--- chunk {c.chunk_index} (pages {c.page_range}, {word_count} words, section={c.section!r}) ---")
         print(preview + ("..." if len(c.text) > 200 else ""))
 
 

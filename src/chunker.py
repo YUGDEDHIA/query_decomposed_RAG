@@ -15,6 +15,7 @@ class Chunk:
     source_file: str
     page_range: tuple[int, int]  # (start_page, end_page), 1-indexed, inclusive
     chunk_index: int
+    section: str | None = None  # set by section_detector.assign_sections, if detected
 
 
 def _split_into_units(pages: list[str]) -> list[tuple[str, int]]:
