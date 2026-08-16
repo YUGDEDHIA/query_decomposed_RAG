@@ -15,6 +15,7 @@ class Chunk:
     source_file: str
     page_range: tuple[int, int]  # (start_page, end_page), 1-indexed, inclusive
     chunk_index: int
+    is_table: bool = False
     section: str | None = None  # set by section_detector.assign_sections, if detected
 
 
