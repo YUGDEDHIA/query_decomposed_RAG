@@ -1,0 +1,9 @@
+# Core (needed from commit 2 onward)
+ollama            # python client for local Ollama server (planner, synthesizer, embeddings)
+numpy             # cosine-similarity vector store, built by hand rather than via a vector DB
+
+# Testing
+pytest
+
+# Add doc-loading deps here once the test corpus format is picked
+# (e.g. pypdf for PDFs, beautifulsoup4 for scraped HTML)
