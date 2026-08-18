@@ -5,5 +5,9 @@ numpy             # cosine-similarity vector store, built by hand rather than vi
 # Testing
 pytest
 
+# SEBI RHP scraper (data/scrape_sebi_rhps.py)
+requests
+beautifulsoup4
+
 # Add doc-loading deps here once the test corpus format is picked
-# (e.g. pypdf for PDFs, beautifulsoup4 for scraped HTML)
+# (e.g. pypdf for PDFs)
