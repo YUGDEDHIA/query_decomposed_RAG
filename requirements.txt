@@ -9,5 +9,5 @@ pytest
 requests
 beautifulsoup4
 
-# Add doc-loading deps here once the test corpus format is picked
-# (e.g. pypdf for PDFs)
+# Loader/chunker (src/loader.py, src/chunker.py)
+pdfplumber
