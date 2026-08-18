@@ -15,5 +15,9 @@ env/
 data/index/
 data/processed/
 
+# RHPs pulled by data/scrape_sebi_rhps.py — regenerate via the scraper
+# rather than tracking large PDFs in git.
+data/raw/*.pdf
+
 # Local secrets / env overrides, if any get added later
 .env
