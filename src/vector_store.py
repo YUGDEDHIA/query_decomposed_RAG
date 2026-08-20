@@ -20,6 +20,8 @@ from pathlib import Path
 
 import numpy as np
 
+from src.section_topics import matches_topic
+
 
 def _normalize(matrix: np.ndarray) -> np.ndarray:
     norms = np.linalg.norm(matrix, axis=1, keepdims=True)
@@ -59,11 +61,20 @@ class VectorStore:
         top_k: int = 5,
         company: str | None = None,
         section: str | None = None,
+        section_topic: str | None = None,
     ) -> list[tuple[dict, float]]:
-        """Top-k chunks by cosine similarity, optionally pre-filtered by company/section."""
+        """Top-k chunks by cosine similarity, optionally pre-filtered by company/section.
+
+        `section` is an exact match against the chunk's literal section
+        string. `section_topic` is a canonical topic (see
+        src.section_topics) matched via alias/punctuation-tolerant
+        normalization -- use this when you don't know the exact wording a
+        given company's RHP used for e.g. "risk factors" vs "OBJECTS OF THE
+        ISSUE" vs "OBJECTS OF THE OFFER".
+        """
         query = _normalize(np.array([query_embedding], dtype=np.float32))[0]
 
-        if company is None and section is None:
+        if company is None and section is None and section_topic is None:
             scores = _matmul(self.embeddings, query)
             order = np.argsort(-scores)[:top_k]
             return [(self.metadata[i], float(scores[i])) for i in order]
@@ -72,6 +83,7 @@ class VectorStore:
             i for i, m in enumerate(self.metadata)
             if (company is None or m["company"] == company)
             and (section is None or m["section"] == section)
+            and (section_topic is None or matches_topic(m["section"], section_topic))
         ]
         if not candidate_indices:
             return []

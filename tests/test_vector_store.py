@@ -75,6 +75,19 @@ def test_search_returns_empty_when_no_candidates_match_filter():
     assert store.search([1.0, 0.0], company="NoSuchCompany") == []
 
 
+def test_search_filters_by_section_topic_across_issue_offer_synonyms():
+    metadata = [
+        _meta(0, company="Acme", section="SECTION III – OBJECTS OF THE ISSUE"),
+        _meta(1, company="Globex", section="OBJECTS OF THE OFFER"),
+        _meta(2, company="Initech", section="CAPITAL STRUCTURE"),
+    ]
+    embeddings = [[1.0, 0.0]] * 3
+    store = VectorStore.build(metadata, embeddings)
+
+    results = store.search([1.0, 0.0], top_k=5, section_topic="OBJECTS OF THE ISSUE")
+    assert {m["chunk_index"] for m, _ in results} == {0, 1}
+
+
 def test_save_and_load_round_trip(tmp_path):
     metadata = [_meta(0), _meta(1, section="Risk Factors")]
     embeddings = [[3.0, 4.0], [1.0, 1.0]]
