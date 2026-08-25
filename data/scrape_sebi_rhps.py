@@ -91,6 +91,40 @@ def fetch_listing_page(session: requests.Session, page_index: int) -> str:
     return resp.text.split("#@#")[0]
 
 
+def search_listing(session: requests.Session, query: str) -> str:
+    """Search the RHP listing for `query` (e.g. a company name), same response shape as fetch_listing_page.
+
+    Reverse-engineered from the site's own search "GO" button
+    (searchFormNewsList('s','-1')): same AJAX endpoint, `next="s"` instead
+    of `"n"`, and a non-empty `search` field. Verified directly: finds an
+    exact-title match ("Aastha Spintex" -> "Aastha Spintex Limited - RHP")
+    and generalizes to companies not previously seen (a then-currently-open
+    IPO not in this project's corpus).
+    """
+    payload = {
+        "nextValue": "1",
+        "next": "s",
+        "search": query,
+        "fromDate": "",
+        "toDate": "",
+        "fromYear": "",
+        "toYear": "",
+        "deptId": "",
+        "sid": "3",
+        "ssid": "15",
+        "smid": "11",
+        "ssidhidden": "15",
+        "intmid": "-1",
+        "sText": "Filings",
+        "ssText": "Public Issues",
+        "smText": "Red Herring Documents filed with ROC",
+        "doDirect": "-1",
+    }
+    headers = {"X-Requested-With": "XMLHttpRequest", "Referer": LISTING_URL}
+    resp = _request(session, "post", AJAX_URL, data=payload, headers=headers)
+    return resp.text.split("#@#")[0]
+
+
 def parse_listing_rows(html: str) -> list[tuple[str, str, str]]:
     """Extract (date, title, detail_url) for genuine RHP rows on one page.
 
