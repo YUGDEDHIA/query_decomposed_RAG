@@ -24,6 +24,37 @@ def test_build_raises_on_length_mismatch():
         VectorStore.build([_meta(0)], [[1.0, 0.0], [0.0, 1.0]])
 
 
+def test_add_appends_and_normalizes_new_chunks():
+    store = VectorStore.build([_meta(0)], [[1.0, 0.0]])
+
+    store.add([_meta(1, company="Globex")], [[3.0, 4.0]])
+
+    assert len(store.metadata) == 2
+    assert store.embeddings.shape == (2, 2)
+    assert np.allclose(store.embeddings[1], [0.6, 0.8])
+
+
+def test_add_is_searchable_immediately():
+    store = VectorStore.build([_meta(0, company="Acme")], [[1.0, 0.0]])
+    store.add([_meta(1, company="Globex")], [[0.0, 1.0]])
+
+    results = store.search([0.0, 1.0], top_k=1)
+    assert results[0][0]["company"] == "Globex"
+
+
+def test_add_raises_on_length_mismatch():
+    store = VectorStore.build([_meta(0)], [[1.0, 0.0]])
+    with pytest.raises(ValueError):
+        store.add([_meta(1)], [[1.0, 0.0], [0.0, 1.0]])
+
+
+def test_add_empty_is_a_noop():
+    store = VectorStore.build([_meta(0)], [[1.0, 0.0]])
+    store.add([], [])
+    assert len(store.metadata) == 1
+    assert store.embeddings.shape == (1, 2)
+
+
 def test_search_ranks_by_cosine_similarity():
     # Three orthogonal-ish 2D vectors; query closest to index 0.
     metadata = [_meta(0), _meta(1), _meta(2)]

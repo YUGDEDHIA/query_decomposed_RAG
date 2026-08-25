@@ -55,6 +55,20 @@ class VectorStore:
         matrix = _normalize(np.array(embeddings, dtype=np.float32))
         return cls(embeddings=matrix, metadata=metadata)
 
+    def add(self, metadata: list[dict], embeddings: list[list[float]]) -> None:
+        """Append new chunks in place -- for on-demand ingestion of a company found mid-session.
+
+        Callers should still persist via save() afterwards if the addition
+        should survive a restart, same as any other mutation to the store.
+        """
+        if len(metadata) != len(embeddings):
+            raise ValueError(f"metadata ({len(metadata)}) and embeddings ({len(embeddings)}) length mismatch")
+        if not metadata:
+            return
+        new_matrix = _normalize(np.array(embeddings, dtype=np.float32))
+        self.embeddings = np.vstack([self.embeddings, new_matrix])
+        self.metadata.extend(metadata)
+
     def search(
         self,
         query_embedding: list[float],
