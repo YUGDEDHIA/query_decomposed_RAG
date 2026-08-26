@@ -11,3 +11,8 @@ beautifulsoup4
 
 # Loader/chunker (src/loader.py, src/chunker.py)
 pdfplumber
+
+# GMP scraper (data/scrape_gmp.py) -- ipomarket.in renders its data
+# tables client-side, so this needs a real browser, not requests+bs4.
+# After installing, also run: playwright install chromium
+playwright

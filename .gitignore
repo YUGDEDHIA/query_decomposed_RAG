@@ -19,5 +19,9 @@ data/processed/
 # rather than tracking large PDFs in git.
 data/raw/*.pdf
 
+# GMP snapshot from data/scrape_gmp.py — live market data, stale within
+# minutes, re-scrape rather than track.
+data/gmp/
+
 # Local secrets / env overrides, if any get added later
 .env
