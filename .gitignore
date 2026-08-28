@@ -23,5 +23,9 @@ data/raw/*.pdf
 # minutes, re-scrape rather than track.
 data/gmp/
 
+# Subscription/anchor-investor snapshot from data/scrape_subscription.py —
+# same live-data reasoning as data/gmp/.
+data/subscription/
+
 # Local secrets / env overrides, if any get added later
 .env
