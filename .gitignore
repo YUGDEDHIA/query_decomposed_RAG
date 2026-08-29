@@ -27,5 +27,12 @@ data/gmp/
 # same live-data reasoning as data/gmp/.
 data/subscription/
 
+# Listing-performance snapshot + tracked daily history from
+# data/scrape_listing_performance.py. Unlike the other two snapshots,
+# history.jsonl is *accumulated* state (see src/listing_performance_answerer.py),
+# not just a disposable cache — but it's still locally-scraped, per-machine
+# data, not something to track in git.
+data/listing_performance/
+
 # Local secrets / env overrides, if any get added later
 .env
