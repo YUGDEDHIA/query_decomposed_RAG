@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHP Research Assistant</title>
+<link rel="stylesheet" href="/style.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>RHP Research Assistant</h1>
+    <p class="subtitle">Query-decomposed RAG over IPO Red Herring Prospectus filings</p>
+  </header>
+
+  <main id="chat"></main>
+
+  <form id="composer">
+    <textarea id="input" placeholder="Ask about risk factors, capital structure, objects of the issue..." rows="1" autofocus></textarea>
+    <button id="send" type="submit">Send</button>
+  </form>
+
+  <script src="/app.js"></script>
+</body>
+</html>
